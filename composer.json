@@ -1,20 +1,20 @@
 {
-    "name": "yiisoft/yii2-debug",
-    "description": "The debugger extension for the Yii framework",
-    "keywords": ["yii2", "debug", "debugger"],
+    "name": "yidu/yii2-yidulog",
+    "description": "The yidu extension for Yii framework debugger",
+    "keywords": ["yii2", "yidu_debug", "debugger"],
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/yiisoft/yii2-debug/issues",
+        "issues": "https://github.com/jianbiao11/yidudebug/issues",
         "forum": "http://www.yiiframework.com/forum/",
         "wiki": "http://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii2-debug"
+        "source": "https://github.com/jianbiao11/yidudebug"
     },
     "authors": [
         {
-            "name": "Qiang Xue",
-            "email": "qiang.xue@gmail.com"
+            "name": "jianbiao11<baseon Qiang Xue>",
+            "email": "154530905@qq.com"
         }
     ],
     "minimum-stability": "dev",
