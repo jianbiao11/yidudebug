@@ -6,9 +6,6 @@
     "license": "BSD-2-Clause",
     "support": {
         "issues": "https://github.com/jianbiao11/yidudebug/issues",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/jianbiao11/yidudebug"
     },
     "authors": [
@@ -24,11 +21,6 @@
     "autoload": {
         "psr-4": {
             "yii\\debug\\": ""
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0"
         }
     }
 }
