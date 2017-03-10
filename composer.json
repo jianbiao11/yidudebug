@@ -3,7 +3,7 @@
     "description": "The yidu extension for Yii framework debugger",
     "keywords": ["yii2", "yidu_debug", "debugger"],
     "type": "yii2-extension",
-    "license": "BSD-3-Clause",
+    "license": "BSD-2-Clause",
     "support": {
         "issues": "https://github.com/jianbiao11/yidudebug/issues",
         "forum": "http://www.yiiframework.com/forum/",
