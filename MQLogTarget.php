@@ -1,29 +1,26 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
 namespace yii\debug;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\debug\components\rabbitmq\Amqp;
 use yii\helpers\FileHelper;
 use yii\log\Target;
 
 /**
- * The debug LogTarget is used to store logs for later use in the debugger tool
+ * send debug info to MQ
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author jianbiao11
  * @since 2.0
  */
-class LogTarget extends Target {
+class MQLogTarget extends Target {
 	/**
 	 * @var Module
 	 */
 	public $module;
 	public $tag;
+	public $rabbitmq;
 
 	/**
 	 * @param \yii\debug\Module $module
@@ -33,6 +30,7 @@ class LogTarget extends Target {
 		parent::__construct($config);
 		$this->module = $module;
 		$this->tag = uniqid();
+		$this->rabbitmq = new Amqp();
 	}
 
 	/**
@@ -50,7 +48,14 @@ class LogTarget extends Target {
 			$data[$id] = $panel->save();
 		}
 		$data['summary'] = $summary;
-		file_put_contents($dataFile, serialize($data));
+
+		$message = serialize($data);
+
+		file_put_contents($dataFile, $message);
+
+		//TODO:发送MQ消息
+		$this->rabbitmq->send('yidudebugger_ex_body', '', $this->tag . '^' . $message);
+
 		if ($this->module->fileMode !== null) {
 			@chmod($dataFile, $this->module->fileMode);
 		}
@@ -82,6 +87,8 @@ class LogTarget extends Target {
 		} else {
 			$manifest = unserialize($manifest);
 		}
+		//TODO:发送MQ消息,将新的请求TAG添加到MQ中
+		$this->rabbitmq->send('yidudebugger_ex_index', '', json_encode($summary));
 
 		$manifest[$this->tag] = $summary;
 		$this->gc($manifest);
