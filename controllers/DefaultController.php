@@ -59,9 +59,17 @@ class DefaultController extends Controller {
 		$searchModel = new Debug();
 
 		$logdate = \Yii::$app->request->get('logdate', date("Y-m-d", time()));
+		//判断日志路径是否存在
+		$logDir = $this->module->dataPath . '/' . $logdate;
 		$session = Yii::$app->session;
-		$session->set('logdate', $logdate);
+		$isnodata = false;
+		$selectdate = $logdate;
+		if (!is_dir($logDir)) {
+			$isnodata = true;
+			$logdate = $session->get('logdate', date("Y-m-d", time()));
+		}
 
+		$session->set('logdate', $logdate);
 		$dataProvider = $searchModel->search($_GET, $this->getManifest());
 
 		// load latest request
@@ -70,12 +78,14 @@ class DefaultController extends Controller {
 		$this->loadData($tag);
 
 		return $this->render('index', [
+			'selectdate' => $selectdate,
 			'logdate' => $logdate,
 			'isshowdate' => $this->module->isLocalDebug,
 			'panels' => $this->module->panels,
 			'dataProvider' => $dataProvider,
 			'searchModel' => $searchModel,
 			'manifest' => $this->getManifest(),
+			'isnodata' => $isnodata,
 		]);
 	}
 
@@ -170,6 +180,7 @@ class DefaultController extends Controller {
 					$session = Yii::$app->session;
 					$logdate = $session->get('logdate');
 					$dataFile = $this->module->dataPath . "/" . $logdate . "/$tag.data";
+					touch($dataFile);
 				}
 
 				$data = unserialize(file_get_contents($dataFile));

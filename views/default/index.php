@@ -62,7 +62,14 @@ $this->title = 'Yii Debugger';
 
 if (isset($this->context->module->panels['db']) && isset($this->context->module->panels['request'])) {
 
-	echo "			<h1>Available Debug Data</h1>";
+	if ($isnodata) {
+		echo '<div class="alert alert-warning alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  没有(' . $selectdate . ')的日志信息..
+			  </div>';
+	}
+
+	echo "			<h1>Available Debug Data (" . $logdate . ") </h1>";
 
 	$codes = [];
 	foreach ($manifest as $tag => $vals) {
