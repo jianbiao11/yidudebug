@@ -68,22 +68,26 @@ class Amqp extends Component {
 	 */
 	public function init() {
 		parent::init();
-		//self::$ampqConnection = \Yii::$app->amqp_conn;
-		if (empty(self::$ampqConnection)) {
-			$this->host = \Yii::$app->params['rabbitmq']['host'];
-			$this->port = \Yii::$app->params['rabbitmq']['port'];
-			$this->user = \Yii::$app->params['rabbitmq']['user'];
-			$this->password = \Yii::$app->params['rabbitmq']['password'];
-			$this->vhost = \Yii::$app->params['rabbitmq']['vhost'];
-			self::$ampqConnection = new AMQPStreamConnection(
-				$this->host,
-				$this->port,
-				$this->user,
-				$this->password,
-				$this->vhost
-			);
+		try {
+			if (empty(self::$ampqConnection)) {
+				$this->host = \Yii::$app->params['rabbitmq']['host'];
+				$this->port = \Yii::$app->params['rabbitmq']['port'];
+				$this->user = \Yii::$app->params['rabbitmq']['user'];
+				$this->password = \Yii::$app->params['rabbitmq']['password'];
+				$this->vhost = \Yii::$app->params['rabbitmq']['vhost'];
+				self::$ampqConnection = new AMQPStreamConnection(
+					$this->host,
+					$this->port,
+					$this->user,
+					$this->password,
+					$this->vhost
+				);
+			}
+			self::$channel = self::getChannel();
+		} catch (\Exception $e) {
+
 		}
-		self::$channel = self::getChannel();
+
 	}
 
 	/**
@@ -119,9 +123,14 @@ class Amqp extends Component {
 	 * @return void
 	 */
 	public static function send($exchange, $routing_key, $message, $type = self::TYPE_FANOUT) {
-		$message = self::prepareMessage($message);
-		self::$channel->exchange_declare($exchange, $type, false, true, false);
-		self::$channel->basic_publish($message, $exchange, $routing_key);
+		try {
+			$message = self::prepareMessage($message);
+			self::$channel->exchange_declare($exchange, $type, false, true, false);
+			self::$channel->basic_publish($message, $exchange, $routing_key);
+		} catch (\Exception $e) {
+
+		}
+
 	}
 
 	/**
