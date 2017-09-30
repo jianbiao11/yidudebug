@@ -75,6 +75,7 @@ class Amqp extends Component {
 				$this->user = \Yii::$app->params['rabbitmq']['user'];
 				$this->password = \Yii::$app->params['rabbitmq']['password'];
 				$this->vhost = \Yii::$app->params['rabbitmq']['vhost'];
+				echo $this->vhost;die();
 				self::$ampqConnection = new AMQPStreamConnection(
 					$this->host,
 					$this->port,
